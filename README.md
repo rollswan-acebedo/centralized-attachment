@@ -16,7 +16,7 @@ Provides centralized storing of file attachment.
     
     class PostController extends Controller
     {
-    use WithAttachments;
+        use WithAttachments;
     }
 
 
