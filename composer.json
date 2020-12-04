@@ -1,0 +1,35 @@
+{
+    "name": "rollswan/centralized-attachment",
+    "description": "Provides centralized storing of file attachment",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rollswan Acebedo",
+            "email": "rollswanacebedo@gmail.com"
+        }
+    ],
+    "require": {
+        "rollswan/uuid": "^1.0.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rollswan\\CentralizedAttachment\\CentralizedAttachmentServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Rollswan\\CentralizedAttachment\\": "src/",
+            "Rollswan\\CentralizedAttachment\\Models\\": "src/Models/",
+            "Rollswan\\CentralizedAttachment\\Traits\\": "src/Traits/"
+        }
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "@php artisan migrate"
+        ]
+    },
+    "minimum-stability": "dev"
+}
