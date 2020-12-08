@@ -42,4 +42,15 @@ trait WithAttachments
             'owner_uuid' => $modelOwner
         ]);
     }
+
+    /**
+     * Stream|Retrieve Attachment
+     *
+     * @param \Rollswan\CentralizedAttachment\Models\Attachment $attachment
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function streamAttachment(Attachment $attachment)
+    {
+        return response()->file(storage_path('app/' . $attachment->path));
+    }
 }
