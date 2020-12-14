@@ -30,8 +30,8 @@ trait WithAttachments
             $file->storeAs($type, $storeAs);
         } else {
             $filename = $uuid;
-            $storeAs = "/{$type}/". $uuid . '.png';
-            Storage::disk('local')->put($storeAs, $file);
+            $storeAs = $uuid . '.png';
+            Storage::disk('local')->put("/{$type}/{$storeAs}", $file);
         }
 
         // Create attachment record
