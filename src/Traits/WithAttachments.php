@@ -27,7 +27,7 @@ trait WithAttachments
         // Check if the attach file is for generated/created file by supplying $generatedFileExtName argument variable
         if (!$generatedFileExtName) {
             $filename = $file->getClientOriginalName();
-            $storeAs = $uuid . $file->getClientOriginalExtension();
+            $storeAs = $uuid . '.' . $file->getClientOriginalExtension();
 
             // Store file from input file upload
             $file->storeAs($folderName, $storeAs, $disk);
