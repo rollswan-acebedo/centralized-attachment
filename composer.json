@@ -27,9 +27,9 @@
         }
     },
     "scripts": {
-        "post-install-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan migrate"
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan migrate"
         ]
     },
     "minimum-stability": "dev"

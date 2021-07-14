@@ -4,11 +4,10 @@ namespace Rollswan\CentralizedAttachment\Models;
 
 use Rollswan\Uuid\Traits\WithUuid;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Attachment extends Model
 {
-    use WithUuid, SoftDeletes;
+    use WithUuid;
 
     /**
      * The primary key associated with the table.
