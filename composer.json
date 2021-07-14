@@ -28,7 +28,8 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "@php artisan migrate"
+            "Illuminate\\Foundation\\ComposerScripts::postInstall",
+            "php artisan migrate"
         ]
     },
     "minimum-stability": "dev"
