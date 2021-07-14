@@ -1,5 +1,3 @@
-
-
 # Centralized File Attachment
 
 Provides centralized storing of file attachment.
@@ -29,5 +27,6 @@ Provides centralized storing of file attachment.
         'folder-name', // Attach file will store in the /storage/app/<folder-name>
         'App\Models\ModelName', // Owner Model
         $model->id, // Owner Model ID
-        True // Optional Param, Default Value is False: set to true if the attach file is generated file
+        'png', // Optional Param, To check whether the attach file is coming from file upload or generated file. Note: Set this file extension name argument if the attach file is generated/created file
+        's3' // Optional Param, The default value is local disk. Simply change the filesystem disk if you wish to switch between the configured storage options
     );

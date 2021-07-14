@@ -26,7 +26,7 @@ class Attachment extends Model
         'filename',
         'path',
         'owner_model',
-        'owner_uuid'
+        'owner_id'
     ];
 
     /**

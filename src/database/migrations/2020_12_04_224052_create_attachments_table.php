@@ -17,10 +17,9 @@ class CreateAttachmentsTable extends Migration
             $table->uuid('attachment_uuid')->primary();
             $table->string('filename');
             $table->string('path');
-            $table->string('owner_model')->nullable()->default(null);
-            $table->uuid('owner_uuid')->nullable()->default(null);
+            $table->string('owner_model');
+            $table->bigInteger('owner_id');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
