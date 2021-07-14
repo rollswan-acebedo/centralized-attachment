@@ -4,6 +4,7 @@ namespace Rollswan\CentralizedAttachment\Traits;
 
 use Rollswan\CentralizedAttachment\Models\Attachment;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 trait WithAttachments
 {
@@ -20,15 +21,18 @@ trait WithAttachments
      */
     public function storeAttachment($file, $folderName, $ownerModel, $ownerModelID, $generatedFileExtName = null, $disk = 'local')
     {
+        // Prepare the data
+        $uuid = (string)Str::uuid();
+
         // Check if the attach file is for generated/created file by supplying $generatedFileExtName argument variable
         if (!$generatedFileExtName) {
             $filename = $file->getClientOriginalName();
-            $storeAs = $ownerModelID . $file->getClientOriginalExtension();
+            $storeAs = $uuid . $file->getClientOriginalExtension();
 
             // Store file from input file upload
             $file->storeAs($folderName, $storeAs, $disk);
         } else {
-            $filename = $ownerModelID;
+            $filename = $uuid;
             $storeAs = $filename . '.' . $generatedFileExtName;
 
             // Store generated/created file

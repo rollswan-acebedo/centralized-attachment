@@ -27,7 +27,7 @@
         }
     },
     "scripts": {
-        "post-autoload-dump": [
+        "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan migrate"
         ]
