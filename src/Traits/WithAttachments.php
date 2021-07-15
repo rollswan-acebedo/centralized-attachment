@@ -55,7 +55,7 @@ trait WithAttachments
      * @param string $disk
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function streamAttachment(Attachment $attachment, $disk)
+    public function streamAttachment(Attachment $attachment, $disk = 'local')
     {
         return response()->file(Storage::disk($disk)->get($attachment->path));
     }
@@ -67,7 +67,7 @@ trait WithAttachments
      * @param string $disk
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function deleteAttachment(Attachment $attachment, $disk)
+    public function deleteAttachment(Attachment $attachment, $disk = 'local')
     {
         return Storage::disk($disk)->delete($attachment->path);
     }
