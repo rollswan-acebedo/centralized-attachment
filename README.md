@@ -24,7 +24,7 @@ Provides centralized storing of file attachment.
 
     $this->storeAttachment(
         $file, // This is for the attach file or generated file
-        'folder-name', // Attach file will store in the /storage/app/<folder-name>
+        'folder-name', // Attach file will store in the /storage/app/<folder-name> (for s3, bucket-name/<folder-name>)
         'App\Models\ModelName', // Owner Model
         $model->id, // Owner Model ID
         'png', // Optional Param, To check whether the attach file is coming from file upload or generated file. Note: Set this file extension name argument if the attach file is generated/created file
