@@ -53,11 +53,14 @@ trait WithAttachments
      *
      * @param \Rollswan\CentralizedAttachment\Models\Attachment $attachment
      * @param string $disk
+     * @param string $mimetype
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function streamAttachment(Attachment $attachment, $disk = 'local')
+    public function streamAttachment(Attachment $attachment, $mimetype, $disk = 'local')
     {
-        return response()->file(Storage::disk($disk)->get($attachment->path));
+        return response(Storage::disk($disk)->get($attachment->path), 200)
+            ->header('Content-Type', $mimetype)
+            ->header('Content-Disposition', 'inline');
     }
 
     /**
