@@ -1,6 +1,6 @@
 {
     "name": "rollswan/centralized-attachment",
-    "description": "Provides centralized storing of file attachment",
+    "description": "Provides centralized file management",
     "type": "library",
     "license": "MIT",
     "authors": [

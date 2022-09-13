@@ -2,8 +2,8 @@
 
 namespace Rollswan\CentralizedAttachment\Models;
 
-use Rollswan\Uuid\Traits\WithUuid;
 use Illuminate\Database\Eloquent\Model;
+use Rollswan\Uuid\Traits\WithUuid;
 
 class Attachment extends Model
 {

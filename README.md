@@ -13,26 +13,73 @@ Provides centralized storing of file attachment.
     
     use Rollswan\CentralizedAttachment\Traits\WithAttachments;
     
-    class PostController extends Controller
+    class ArticleController extends Controller
     {
         use WithAttachments;
     }
 
-
-4) Use `storeAttachment()` in controller, 
+4) Use `storeAttachment()` method in controller, 
 
 *Example:*
 
     $this->storeAttachment(
         $file, // This is for the attach file or generated file
-        'folder-name', // Attach file will store in the /storage/app/<folder-name> (for s3, bucket-name/<folder-name>)
+        $folderName, // Attach file will store in the /storage/app/<folder-name> (for s3, bucket-name/<folder-name>)
         'App\Models\ModelName', // Owner Model
-        $model->id, // Owner Model ID
-        'png', // Optional Param, To check whether the attach file is coming from file upload or generated file. Note: Set this file extension name argument if the attach file is generated/created file
-        's3' // Optional Param, The default value is local disk. Simply change the filesystem disk if you wish to switch between the configured storage options
+        $ownerModel, // Owner Model ID
+        $generatedFileExtName, // Optional Param, To check whether the attach file is coming from file upload or generated file. Note: Set this file extension name argument if the attach file is generated/created file
+        $disk // Optional Param, The default value is local disk. Simply change the filesystem disk if you wish to switch between the configured storage options
     );
 
-5) Use `Attachment` model in your controller
+    namespace App\Http\Controllers;
+    
+    use Rollswan\CentralizedAttachment\Models\Attachment;
+    use Rollswan\CentralizedAttachment\Traits\WithAttachments;
+    
+    class ArticleController extends Controller
+    {
+        use WithAttachments;
+
+        /**
+         * Creates a new article.
+         *
+         * @param  CreateArticleRequest $request
+         * @return \Illuminate\Http\RedirectResponse
+         */
+        public function create(CreateArticleRequest $request)
+        {
+            // Create the article
+            $article = Article::create($request->except('_token'));
+
+            // Process attachments, if any
+            if (!empty($request->attachments)) {
+                $this->storeArticleAttachments($article->id, $request->attachments);
+            }
+
+            session()->flash('success', "Article has been successfully created.");
+            return back();
+        }
+
+        /**
+         * Store article attachments.
+         *
+         * @param integer $articleId
+         * @param \Illuminate\Http\UploadedFile $attachments
+         */
+        private function storeArticleAttachments($articleId, $attachments)
+        {
+            foreach ($request->attachments as $attachment) {
+                $this->storeAttachment(
+                    $attachment,
+                    'articles',
+                    'App\Models\Article',
+                    $articleId
+                );
+            }
+        }
+    }    
+
+5) Use `Attachment` model in controller
 
 *Example:*
 
@@ -41,17 +88,17 @@ Provides centralized storing of file attachment.
     use Rollswan\CentralizedAttachment\Models\Attachment;
     use Rollswan\CentralizedAttachment\Traits\WithAttachments;
     
-    class PostController extends Controller
+    class ArticleController extends Controller
     {
         use WithAttachments;
 
         /**
-         * View file attachment.
+         * View attachment.
          *
-         * @param $uuid
+         * @param  string $uuid
          * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
          */
-        public function viewFileAttachment($uuid)
+        public function viewAttachment($uuid)
         {
             $attachment = Attachment::find($uuid);
             if (!$attachment) {
@@ -61,3 +108,32 @@ Provides centralized storing of file attachment.
             return $this->streamAttachment($attachment, 'application/pdf');
         }
     }
+
+6) Use `deleteAttachment()` method in controller
+
+*Example:*
+
+    namespace App\Http\Controllers;
+    
+    use Rollswan\CentralizedAttachment\Models\Attachment;
+    use Rollswan\CentralizedAttachment\Traits\WithAttachments;
+    
+    class ArticleController extends Controller
+    {
+        /**
+         * Delete article attachments.
+         *
+         * @param integer $articleId
+         */
+        private function deleteArticleAttachment($articleId)
+        {
+            // Get the article attachments
+            $attachments = Attachment::where('owner_model', 'App\Models\Article')
+                ->where('owner_id', $articleId)
+                ->get();
+
+            foreach ($attachments as $attachment) {
+                $this->deleteAttachment($attachment);
+            }
+        }
+    }    

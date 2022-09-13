@@ -2,26 +2,31 @@
 
 namespace Rollswan\CentralizedAttachment\Traits;
 
-use Rollswan\CentralizedAttachment\Models\Attachment;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Rollswan\CentralizedAttachment\Models\Attachment;
 
 trait WithAttachments
 {
     /**
      * Store Attachment
      *
-     * @param mixed $file
-     * @param string $folderName
-     * @param string $ownerModel
-     * @param int $ownerModelID
-     * @param string $generatedFileExtName
-     * @param string $disk
+     * @param  mixed $file
+     * @param  string $folderName
+     * @param  string $ownerModel
+     * @param  int $ownerModelID
+     * @param  string $generatedFileExtName
+     * @param  string $disk
      * @return \Rollswan\CentralizedAttachments\Models\Attachment
      */
-    public function storeAttachment($file, $folderName, $ownerModel, $ownerModelID, $generatedFileExtName = null, $disk = 'local')
-    {
-        // Prepare the data
+    public function storeAttachment(
+        $file,
+        $folderName,
+        $ownerModel,
+        $ownerModelID,
+        $generatedFileExtName = null,
+        $disk = 'local'
+    ) {
         $uuid = (string)Str::uuid();
 
         // Check if the attach file is for generated/created file by supplying $generatedFileExtName argument variable
@@ -39,7 +44,6 @@ trait WithAttachments
             Storage::disk($disk)->put("/{$folderName}/{$storeAs}", $file);
         }
 
-        // Create attachment record
         return Attachment::create([
             'filename' => $filename,
             'path' => "/{$folderName}/{$storeAs}",
@@ -51,9 +55,9 @@ trait WithAttachments
     /**
      * Stream|Retrieve Attachment
      *
-     * @param \Rollswan\CentralizedAttachment\Models\Attachment $attachment
-     * @param string $disk
-     * @param string $mimetype
+     * @param  \Rollswan\CentralizedAttachment\Models\Attachment $attachment
+     * @param  string $mimetype
+     * @param  string $disk
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function streamAttachment(Attachment $attachment, $mimetype, $disk = 'local')
@@ -68,10 +72,10 @@ trait WithAttachments
      *
      * @param \Rollswan\CentralizedAttachment\Models\Attachment $attachment
      * @param string $disk
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function deleteAttachment(Attachment $attachment, $disk = 'local')
     {
-        return Storage::disk($disk)->delete($attachment->path);
+        Storage::disk($disk)->delete($attachment->path);
+        return $attachment->delete();
     }
 }
